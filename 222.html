@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neil | GTA5RP Best Cheats</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --accent-purple: #8a2be2;
+            --shadow-glow: rgba(138, 43, 226, 0.8);
+            --content-width: 1100px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; border: none; }
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        .lines-wrapper {
+            position: fixed; top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 100%; max-width: var(--content-width);
+            height: 100vh; pointer-events: none; z-index: 10;
+        }
+        .side-line { position: absolute; top: 0; width: 2px; height: 100%; background: rgba(138, 43, 226, 0.2); }
+        .line-left { left: 0; }
+        .line-right { right: 0; }
+        .side-line::after {
+            content: ''; position: absolute; top: -150px; left: -1px;
+            width: 4px; height: 120px;
+            background: linear-gradient(to bottom, transparent, #fff, transparent);
+            box-shadow: 0 0 20px #fff;
+            animation: pulseMove 3s infinite linear;
+        }
+        .line-right::after { animation-delay: 1.5s; }
+        @keyframes pulseMove { 0% { top: -150px; } 100% { top: 100%; } }
+
+        #matrix-canvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2; opacity: 0.15;
+        }
+
+        /* HERO */
+        .hero {
+            width: 100%; height: 100vh;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center; position: relative; gap: 0;
+        }
+        .main-logo {
+            width: 180px; height: 180px; object-fit: cover;
+            border-radius: 30px; margin-bottom: 25px;
+            box-shadow: 0 0 40px var(--shadow-glow);
+            animation: float 4s infinite ease-in-out; display: block;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .hero-text { display: flex; flex-direction: column; align-items: center; margin-bottom: 40px; }
+        .hero h1 {
+            font-size: calc(4rem + 4vw); font-weight: 700;
+            letter-spacing: 0.3em; padding-left: 0.3em;
+            text-transform: uppercase;
+            background: linear-gradient(to bottom, #fff, var(--accent-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            display: inline-block; margin-bottom: 10px;
+        }
+        .subtitle {
+            font-weight: 400; letter-spacing: 0.25em; padding-left: 0.25em;
+            text-transform: uppercase; color: rgba(255, 255, 255, 0.8);
+        }
+        .btn-group { display: flex; flex-direction: column; gap: 15px; width: 280px; }
+        .btn {
+            padding: 18px 0; border: 1px solid var(--accent-purple);
+            color: #fff; text-decoration: none; font-size: 0.85rem;
+            text-transform: uppercase; letter-spacing: 0.2em;
+            transition: 0.3s; border-radius: 6px;
+            background: rgba(138, 43, 226, 0.1); text-align: center;
+        }
+        .btn:hover { background: var(--accent-purple); box-shadow: 0 0 35px var(--shadow-glow); }
+
+        /* PRICE LIST */
+        .price-section {
+            width: 100%; max-width: 860px;
+            margin: 50px auto 0;
+            padding: 0 20px;
+        }
+        .price-title {
+            text-align: center;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 18px;
+        }
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+        .price-card {
+            border: 1px solid rgba(138, 43, 226, 0.35);
+            border-radius: 10px;
+            padding: 22px 16px 18px;
+            text-align: center;
+            background: rgba(138, 43, 226, 0.06);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .price-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--accent-purple), transparent);
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .price-card:hover { border-color: var(--accent-purple); box-shadow: 0 0 30px rgba(138,43,226,0.2); }
+        .price-card:hover::before { opacity: 1; }
+        .price-card.popular { border-color: rgba(138,43,226,0.7); }
+        .price-card.popular::before { opacity: 1; }
+        .popular-badge {
+            display: inline-block;
+            font-size: 0.6rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent-purple);
+            border: 1px solid var(--accent-purple);
+            border-radius: 20px;
+            padding: 3px 10px;
+            margin-bottom: 12px;
+        }
+        .price-period {
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 14px;
+        }
+        .price-main {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .price-main span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.6);
+        }
+        .price-alts {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .price-alt {
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            padding: 3px 8px;
+        }
+
+        /* INFO + TIMELINE */
+        .info-wrapper { padding: 100px 20px; max-width: 800px; margin: 0 auto; }
+        .section-title {
+            text-align: center; font-size: 2.5rem;
+            text-transform: uppercase; letter-spacing: 0.2em;
+            border-bottom: 2px solid var(--accent-purple);
+            display: table; margin: 0 auto 60px; padding-bottom: 10px;
+        }
+        .timeline { position: relative; border-left: 2px solid var(--accent-purple); padding-left: 30px; }
+        .timeline-item { position: relative; margin-bottom: 50px; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -41px; top: 5px;
+            width: 20px; height: 20px;
+            background: var(--bg-dark); border: 2px solid var(--accent-purple); border-radius: 50%;
+        }
+
+        /* SCREENSHOT */
+        .screenshot-block { margin-top: 60px; text-align: center; }
+        .screenshot-block img {
+            width: 100%; max-width: 760px; border-radius: 12px;
+            border: 1px solid var(--accent-purple);
+            box-shadow: 0 0 40px rgba(138, 43, 226, 0.4);
+            display: block; margin: 0 auto; transition: 0.4s;
+        }
+        .screenshot-block img:hover { box-shadow: 0 0 70px rgba(138, 43, 226, 0.8); transform: scale(1.01); }
+        .screenshot-caption {
+            margin-top: 14px; color: rgba(255, 255, 255, 0.45);
+            font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase;
+        }
+
+        /* FEATURES */
+        .features-section { max-width: 860px; margin: 70px auto 0; padding: 0 20px; }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+        }
+        .feat-card {
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 10px;
+            padding: 18px 16px;
+            background: rgba(138, 43, 226, 0.05);
+            transition: 0.3s;
+            position: relative;
+        }
+        .feat-card:hover {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.2);
+            transform: translateY(-3px);
+        }
+        .feat-num {
+            font-size: 0.65rem; font-weight: 700;
+            letter-spacing: 0.15em; color: var(--accent-purple);
+            margin-bottom: 8px; display: block;
+        }
+        .feat-name {
+            font-size: 0.9rem; font-weight: 700;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: #fff; margin-bottom: 6px;
+        }
+        .feat-desc { font-size: 0.72rem; color: rgba(255,255,255,0.45); line-height: 1.6; }
+
+        /* CREATORS */
+        .creators-section {
+            padding: 100px 20px;
+            display: flex; flex-direction: column;
+            align-items: center; gap: 80px;
+        }
+        .creator-card { width: 100%; max-width: 500px; text-align: center; cursor: pointer; }
+        .mask-container {
+            width: 280px; height: 280px; margin: 20px auto; transition: 0.6s;
+            filter: grayscale(1) brightness(0.5); position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .mask-container img { width: 100%; height: 100%; object-fit: contain; }
+        .mask-placeholder {
+            width: 100%; height: 100%; display: flex; align-items: center;
+            justify-content: center; border: 2px dashed rgba(138, 43, 226, 0.3);
+            border-radius: 12px; color: rgba(255, 255, 255, 0.2);
+            font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+        }
+        .creator-card:hover .mask-container {
+            transform: scale(1.1);
+            filter: grayscale(0) brightness(1.1) drop-shadow(0 0 30px var(--accent-purple));
+        }
+        .creator-info {
+            max-height: 0; opacity: 0; overflow: hidden; transition: 0.8s;
+            color: rgba(255, 255, 255, 0.7); line-height: 1.7;
+        }
+        .creator-card:hover .creator-info { max-height: 300px; opacity: 1; }
+
+        @media (max-width: 768px) {
+            .side-line { display: none; }
+            .price-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .features-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lines-wrapper">
+        <div class="side-line line-left"></div>
+        <div class="side-line line-right"></div>
+    </div>
+
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- HERO -->
+    <section class="hero">
+        <img src="logo.jpg" alt="Neil Logo" class="main-logo" data-aos="fade-down">
+        <div class="hero-text" data-aos="fade-up" data-aos-delay="200">
+            <h1>NEIL</h1>
+            <p class="subtitle">GTA5RP Best Cheats</p>
+        </div>
+        <div class="btn-group" data-aos="fade-up" data-aos-delay="400">
+            <a href="https://funpay.com/users/17143718/" target="_blank" class="btn">Купить</a>
+            <a href="https://t.me/Neil_Cheat" target="_blank" class="btn">Тех. Поддержка</a>
+        </div>
+
+        <!-- PRICE LIST -->
+        <div class="price-section" data-aos="fade-up" data-aos-delay="600">
+            <p class="price-title">Тарифы</p>
+            <div class="price-grid">
+                <div class="price-card">
+                    <p class="price-period">1 день</p>
+                    <p class="price-main">20 <span>RUB</span></p>
+                    <div class="price-alts">
+                        <span class="price-alt">10 UAH</span>
+                        <span class="price-alt">0.10 $</span>
+                    </div>
+                </div>
+                <div class="price-card popular">
+                    <span class="popular-badge">Популярно</span>
+                    <p class="price-period">7 дней</p>
+                    <p class="price-main">100 <span>RUB</span></p>
+                    <div class="price-alts">
+                        <span class="price-alt">50 UAH</span>
+                        <span class="price-alt">1 $</span>
+                    </div>
+                </div>
+                <div class="price-card">
+                    <p class="price-period">30 дней</p>
+                    <p class="price-main">250 <span>RUB</span></p>
+                    <div class="price-alts">
+                        <span class="price-alt">125 UAH</span>
+                        <span class="price-alt">2.5 $</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- О ПРОЕКТЕ -->
+    <div class="info-wrapper">
+        <h2 class="section-title" data-aos="fade-up">О проекте</h2>
+        <div class="timeline" style="margin-bottom: 60px;">
+            <div class="timeline-item" data-aos="fade-left">
+                <span style="color:var(--accent-purple); text-transform: uppercase; font-weight: bold;">Neil Bot</span>
+                <h3>Что это такое?</h3>
+                <p>Чит, который был создан с любовью и некой иронией, чтобы упростить вашу рутину на проекте GTA5RP на платформе RAGE MP.</p>
+            </div>
+        </div>
+
+        <!-- СКРИНШОТ -->
+        <div class="screenshot-block" data-aos="fade-up">
+            <img src="Screen.jpg" alt="Скриншот Neil Cheat">
+            <p class="screenshot-caption">Интерфейс Neil — превью</p>
+        </div>
+
+        <!-- ФУНКЦИОНАЛ -->
+        <h2 class="section-title" data-aos="fade-up" style="margin-top: 80px;">Функционал</h2>
+        <div class="features-section" style="max-width:100%; padding:0;">
+            <div class="features-grid">
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="0">
+                    <span class="feat-num">01</span>
+                    <p class="feat-name">Anti-AFK</p>
+                    <p class="feat-desc">Автоматически предотвращает кик за бездействие на сервере</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="50">
+                    <span class="feat-num">02</span>
+                    <p class="feat-name">Деморган</p>
+                    <p class="feat-desc">Автоматизация работы на шахте Деморган</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="100">
+                    <span class="feat-num">03</span>
+                    <p class="feat-name">Стройка / Шахта</p>
+                    <p class="feat-desc">Автофарм на строительных и шахтёрских работах</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="150">
+                    <span class="feat-num">04</span>
+                    <p class="feat-name">Порт</p>
+                    <p class="feat-desc">Автоматизация работы в порту</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="200">
+                    <span class="feat-num">05</span>
+                    <p class="feat-name">Коровы</p>
+                    <p class="feat-desc">Автофарм на ферме с животными</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="250">
+                    <span class="feat-num">06</span>
+                    <p class="feat-name">Качалка</p>
+                    <p class="feat-desc">Автоматическая прокачка физической силы</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="300">
+                    <span class="feat-num">07</span>
+                    <p class="feat-name">Кулинария</p>
+                    <p class="feat-desc">Автоматизация приготовления еды</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="350">
+                    <span class="feat-num">08</span>
+                    <p class="feat-name">КПК</p>
+                    <p class="feat-desc">Работа с внутриигровым КПК-устройством</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="400">
+                    <span class="feat-num">09</span>
+                    <p class="feat-name">Bonus Point</p>
+                    <p class="feat-desc">Автоматический сбор бонусных очков</p>
+                </div>
+                <div class="feat-card" data-aos="fade-up" data-aos-delay="450">
+                    <span class="feat-num">10</span>
+                    <p class="feat-name">Бинды</p>
+                    <p class="feat-desc">Настраиваемые горячие клавиши для быстрых действий</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ИСТОРИЯ -->
+        <h2 class="section-title" data-aos="fade-up" style="margin-top: 100px;">История чита</h2>
+        <div class="timeline">
+            <div class="timeline-item" data-aos="fade-left">
+                <span style="color:var(--accent-purple)">Декабрь 2025</span>
+                <h3>Зарождение идеи проекта</h3>
+                <p>Идея только начала свое зарождение. Поиск векторов развития и формирование концепции безопасности.</p>
+            </div>
+            <div class="timeline-item" data-aos="fade-left" data-aos-delay="200">
+                <span style="color:var(--accent-purple)">Март 2026</span>
+                <h3>Импровизация</h3>
+                <p>Началась активная фаза разработки. Написаны первые коды и заложен фундамент основных функций чита.</p>
+            </div>
+            <div class="timeline-item" data-aos="fade-left" data-aos-delay="400">
+                <span style="color:var(--accent-purple)">Сейчас</span>
+                <h3>Подготовка к выходу</h3>
+                <p>Чит готов к выходу в открытый доступ и уже стабильно функционирует. В данный момент идет работа над исправлением мелких багов и недоработок.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- КОМАНДА -->
+    <section class="creators-section">
+        <h2 class="section-title">Команда</h2>
+        <div class="creator-card" data-aos="zoom-in">
+            <h3 style="font-size: 2rem; letter-spacing: 0.3em;">PRIME</h3>
+            <div class="mask-container" id="mask-prime"></div>
+            <div class="creator-info">
+                <p>Главный идеолог и архитектор Neil. Ответственен за создание ядра софта, уникальные алгоритмы обхода Easy Anti-Cheat и систему Cloud-Sync. PRIME — это мозг проекта.</p>
+            </div>
+        </div>
+        <div class="creator-card" data-aos="zoom-in" data-aos-delay="200">
+            <h3 style="font-size: 2rem; letter-spacing: 0.3em;">ZAWOO</h3>
+            <div class="mask-container" id="mask-zawoo"></div>
+            <div class="creator-info">
+                <p>Мастер визуализации и интерфейсов. Zawoo превращает сложные функции в интуитивно понятный и стильный инструмент. Он следит за тем, чтобы Neil был не только мощным, но и удобным.</p>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000 });
+
+        const testImg = new Image();
+        testImg.src = 'mask.jpg?' + Date.now();
+        testImg.onload = function () {
+            ['mask-prime', 'mask-zawoo'].forEach(id => {
+                const img = document.createElement('img');
+                img.src = 'mask.jpg'; img.alt = 'Mask';
+                document.getElementById(id).appendChild(img);
+            });
+        };
+        testImg.onerror = function () {
+            ['mask-prime', 'mask-zawoo'].forEach(id => {
+                const ph = document.createElement('div');
+                ph.className = 'mask-placeholder';
+                ph.textContent = 'mask.jpg не найден';
+                document.getElementById(id).appendChild(ph);
+            });
+        };
+
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const chars = "01";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+        function draw() {
+            ctx.fillStyle = "rgba(5, 5, 5, 0.1)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#00ff41";
+            ctx.font = fontSize + "px monospace";
+            drops.forEach((y, i) => {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, y * fontSize);
+                if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            });
+        }
+        setInterval(draw, 35);
+    </script>
+</body>
+</html>
